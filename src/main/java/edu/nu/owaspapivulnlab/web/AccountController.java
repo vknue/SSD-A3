@@ -51,7 +51,7 @@ public class AccountController {
     // VULNERABILITY(API4: Unrestricted Resource Consumption) - no rate limiting on transfer
     // VULNERABILITY(API5/1): no authorization check on owner
     @PostMapping("/{id}/transfer")
-    public ResponseEntity<?> transfer(@PathVariable Long id, @RequestParam Double amount) {
+    public ResponseEntity<Map<String, Object>> transfer(@PathVariable Long id, @RequestParam Double amount) {
         Account a = accounts.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
         a.setBalance(a.getBalance() - amount);
         accounts.save(a);

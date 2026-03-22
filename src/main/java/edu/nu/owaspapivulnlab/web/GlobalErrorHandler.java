@@ -14,7 +14,7 @@ import java.util.Map;
 public class GlobalErrorHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> all(Exception e) {
+    public ResponseEntity<Map<String, String>> all(Exception e) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error", "An internal server error occurred.");
             errorMap.put("message", " General Error");
@@ -23,7 +23,7 @@ public class GlobalErrorHandler {
     }
 
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<?> db(DataAccessException e) {
+    public ResponseEntity<Map<String, String>> db(DataAccessException e) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("dbError", "Database error");
         return ResponseEntity.status(500).body(errorMap);

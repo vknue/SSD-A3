@@ -49,7 +49,7 @@ public class UserController {
 
     // VULNERABILITY(API5: Broken Function Level Authorization) - allows regular users to delete anyone
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         users.deleteById(id);
         Map<String, String> response = new HashMap<>();
         response.put("status", "deleted");

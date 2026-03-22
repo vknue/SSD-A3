@@ -1,6 +1,0 @@
-projectKey=ssda3
-serverUrl=http://localhost:9000
-serverVersion=26.3.0.120487
-dashboardUrl=http://localhost:9000/dashboard?id=ssda3
-ceTaskId=0eb82c68-6286-4bf0-9b1c-4e898dae38bc
-ceTaskUrl=http://localhost:9000/api/ce/task?id=0eb82c68-6286-4bf0-9b1c-4e898dae38bc

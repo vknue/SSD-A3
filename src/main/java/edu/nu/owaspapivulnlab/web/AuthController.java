@@ -55,7 +55,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginReq req) {
+    public ResponseEntity<Object> login(@RequestBody LoginReq req) {
         // VULNERABILITY(API2: Broken Authentication): plaintext password check, no lockout/rate limit/MFA
         AppUser user = users.findByUsername(req.username()).orElse(null);
         if (user != null && user.getPassword().equals(req.password())) {
