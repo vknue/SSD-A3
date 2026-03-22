@@ -34,8 +34,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(reg -> reg
                 .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
-                // VULNERABILITY: broad permitAll on GET allows data scraping (API1/2 depending on context)
-                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .requestMatchers("/api/accounts/**").hasRole("USER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
@@ -60,13 +59,20 @@ public class SecurityConfig {
                 try {
                     Claims c = Jwts.parserBuilder().setSigningKey(secret.getBytes()).build()
                             .parseClaimsJws(token).getBody();
+
+                    if (!"http://localhost:8080".equals(c.getIssuer()) || !"ssda3-api".equals(c.getAudience())) {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        throw new JwtException("No audience");
+                    }
+
                     String user = c.getSubject();
                     String role = (String) c.get("role");
                     UsernamePasswordAuthenticationToken authn = new UsernamePasswordAuthenticationToken(user, null,
                             role != null ? Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role)) : Collections.emptyList());
                     SecurityContextHolder.getContext().setAuthentication(authn);
                 } catch (JwtException e) {
-                    // VULNERABILITY: swallow errors; continue as anonymous (API7)
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
                 }
             }
             chain.doFilter(request, response);
