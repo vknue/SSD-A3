@@ -1,7 +1,7 @@
 package edu.nu.owaspapivulnlab.service;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +24,8 @@ public class JwtService {
                 .setSubject(subject)
                 .addClaims(claims)
                 .setIssuedAt(new Date(now))
-                //.setIssuer("http://localhost:8080")
-                //.setAudience("ssda3-api")
                 .setExpiration(new Date(now + ttlSeconds * 1000))
-                .signWith(SignatureAlgorithm.HS256, secret.getBytes())
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
 }

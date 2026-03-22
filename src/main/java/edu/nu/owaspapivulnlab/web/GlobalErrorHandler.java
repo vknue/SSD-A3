@@ -16,7 +16,6 @@ public class GlobalErrorHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> all(Exception e) {
         Map<String, String> errorMap = new HashMap<>();
-        //errorMap.put("error", e.getClass().getName());
         errorMap.put("error", "An internal server error occurred.");
             errorMap.put("message", " General Error");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
