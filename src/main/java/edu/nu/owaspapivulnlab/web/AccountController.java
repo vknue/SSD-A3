@@ -1,12 +1,15 @@
 package edu.nu.owaspapivulnlab.web;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import edu.nu.owaspapivulnlab.model.Account;
 import edu.nu.owaspapivulnlab.model.AppUser;
 import edu.nu.owaspapivulnlab.repo.AccountRepository;
 import edu.nu.owaspapivulnlab.repo.AppUserRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +31,20 @@ public class AccountController {
     @GetMapping("/{id}/balance")
     public Double balance(@PathVariable Long id) {
         Account a = accounts.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof Long) && !(principal instanceof Integer)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+        }
+        Long currentUserId;
+        try {
+            currentUserId = Long.valueOf(principal.toString());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user identification");
+        }
+
+        if (!a.getOwnerUserId().equals(currentUserId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access Denied");
+        }
         return a.getBalance();
     }
 

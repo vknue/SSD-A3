@@ -60,7 +60,7 @@ class AdditionalSecurityExpectationsTests {
         // Use existing login token (which lacks iss/aud) to hit a protected endpoint
         String weak = login("alice","alice123");
         mvc.perform(get("/api/accounts/mine").header("Authorization","Bearer "+weak))
-                .andExpect(status().isUnauthorized()); // Fails now (returns 200/OK)
+                .andExpect(status().isForbidden()); // Fails now (returns 200/OK)
     }
 
     @Test

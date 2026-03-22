@@ -28,7 +28,7 @@ public class UserController {
 
     // VULNERABILITY(API6: Mass Assignment) - binds role/isAdmin from client
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)  
+    @ResponseStatus(HttpStatus.CREATED)
     public AppUser create(@Valid @RequestBody AppUser body) {
         body.setRole("USER");
         body.setIsAdmin(false);

@@ -62,6 +62,8 @@ public class AuthController {
             Map<String, Object> claims = new HashMap<>();
             claims.put("role", user.getRole());
             claims.put("isAdmin", user.isAdmin()); // VULN: trusts client-side role later
+            claims.put("iss", "http://localhost:8080");
+            claims.put("aud", "ssda3-api");
             String token = jwt.issue(user.getUsername(), claims);
             return ResponseEntity.ok(new TokenRes(token));
         }

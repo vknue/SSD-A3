@@ -24,6 +24,8 @@ public class JwtService {
                 .setSubject(subject)
                 .addClaims(claims)
                 .setIssuedAt(new Date(now))
+                //.setIssuer("http://localhost:8080")
+                //.setAudience("ssda3-api")
                 .setExpiration(new Date(now + ttlSeconds * 1000))
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes())
                 .compact();
