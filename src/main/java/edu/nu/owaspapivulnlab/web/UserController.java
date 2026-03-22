@@ -1,6 +1,7 @@
 package edu.nu.owaspapivulnlab.web;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import edu.nu.owaspapivulnlab.model.AppUser;
@@ -27,7 +28,10 @@ public class UserController {
 
     // VULNERABILITY(API6: Mass Assignment) - binds role/isAdmin from client
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)  
     public AppUser create(@Valid @RequestBody AppUser body) {
+        body.setRole("USER");
+        body.setIsAdmin(false);
         return users.save(body);
     }
 
