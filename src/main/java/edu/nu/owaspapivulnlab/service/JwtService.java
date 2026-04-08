@@ -17,7 +17,6 @@ public class JwtService {
     @Value("${app.jwt.ttl-seconds}")
     private long ttlSeconds;
 
-    // VULNERABILITY(API8): HS256 with trivial key, long TTL, missing issuer/audience
     public String issue(String subject, Map<String, Object> claims) {
         long now = System.currentTimeMillis();
         return Jwts.builder()
